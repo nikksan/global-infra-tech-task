@@ -8,7 +8,10 @@
     "lint": "eslint './src/**/*.ts' './tests/**/*.ts'",
     "test": "jest --runInBand --coverage=true",
     "watch": "jest --runInBand --watch --bail --coverage=false",
-    "prepare": "ts-patch install && typia patch"
+    "prepare": "ts-patch install && typia patch && husky install"
+  },
+  "lint-staged": {
+    "*.ts": "eslint"
   },
   "keywords": [],
   "author": "",
@@ -42,11 +45,13 @@
     "jest": "^29.7.0",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
+    "lint-staged": "^15.2.0",
     "supertest": "^6.3.4",
     "swagger-ui-dist": "^5.11.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
     "ts-patch": "^3.1.2",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "husky": "^8.0.0"
   }
 }

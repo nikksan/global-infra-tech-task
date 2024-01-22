@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import { Config } from '@config/Config';
 import Koa from 'koa';
 import KoaRouter from 'koa-router';
