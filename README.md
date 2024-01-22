@@ -27,7 +27,7 @@ Minimalistic service providing REST for news entity.
 
 ## Environment setup
 
-Current working environment could be changed by setting `NODE_ENV` environment variable. Available options are `development` (default), `testing`, `staging` and `production`.
+Current working environment could be changed by setting `NODE_ENV` environment variable. Available options are `development` (default), and `testing`.
 
 ## Configuration
 
