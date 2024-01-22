@@ -1,0 +1,16 @@
+type: object
+description: Validation error
+required:
+  - status
+  - code
+  - message
+properties:
+  status:
+    type: number
+  code:
+    type: number
+  message:
+    type: number
+  meta:
+    type: object
+    additionalProperties: true

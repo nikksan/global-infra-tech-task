@@ -1,0 +1,152 @@
+get:
+  operationId: getNews
+  tags:
+    - Public
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/GetNewsResponse"
+    404:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/ValidationError.yaml"
+    500:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/GeneralError.yaml"
+
+patch:
+  operationId: updateNews
+  tags:
+    - Public
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/UpdateNewsBody"
+  responses:
+    200:
+      description: Empty response.
+    400:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/NotFoundError.yaml"
+    404:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/ValidationError.yaml"
+    500:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/GeneralError.yaml"
+
+delete:
+  operationId: deleteNews
+  tags:
+    - Public
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+  responses:
+    200:
+      description: Empty response.
+    400:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/NotFoundError.yaml"
+    404:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/ValidationError.yaml"
+    500:
+      content:
+        application/json:
+          schema:
+            $ref: "../../errors/GeneralError.yaml"
+
+
+components:
+  GetNewsResponse:
+    type: object
+    required:
+     - data
+    properties:
+      data:
+        type: object
+        required:
+          - id
+          - title
+          - shortDescription
+          - text
+          - date
+        properties:
+          id:
+            type: string
+          title:
+            type: string
+            minLength: 4
+            maxLength: 128
+          shortDescription:
+            type: string
+            minLength: 4
+            maxLength: 256
+          text:
+            type: string
+            minLength: 4
+            maxLength: 2048
+          date:
+            type: string
+  UpdateNewsBody:
+    type: object
+    properties:
+      title:
+        type: string
+        minLength: 4
+        maxLength: 128
+      shortDescription:
+        type: string
+        minLength: 4
+        maxLength: 256
+      text:
+        type: string
+        minLength: 4
+        maxLength: 2048
+
+  # CreateNewsResponse:
+  #   type: object
+  #   required:
+  #     - data
+  #   properties:
+  #     data:
+  #       type: string
+  # GetNewsResponse:
+  #   type: object
+  #   required:
+  #     - data
+  #   properties:
+  #     data:
+  #       type: string

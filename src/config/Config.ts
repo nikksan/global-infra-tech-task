@@ -8,6 +8,7 @@ export interface Config {
   };
   rest: {
     port: number;
+    enableDocs: boolean,
   };
   grpc: {
     port: number,

@@ -1,0 +1,13 @@
+type: object
+description: Not found error
+required:
+  - status
+  - code
+  - message
+properties:
+  status:
+    type: number
+  code:
+    type: number
+  message:
+    type: number

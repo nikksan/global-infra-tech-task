@@ -13,6 +13,7 @@ const config: Config = {
   },
   rest: {
     port: parseNumber('REST_SERVER_PORT', 3000),
+    enableDocs: true,
   },
   grpc: {
     port: parseNumber('GRPC_SERVER_PORT', 3001),

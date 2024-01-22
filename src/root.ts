@@ -1,4 +1,4 @@
-import { InjectionMode, asClass, createContainer } from 'awilix';
+import { InjectionMode, asClass, asValue, createContainer } from 'awilix';
 import { loadConfig } from './config';
 import LoggerFactory from '@infrastructure/logger/LoggerFactory';
 import RESTNewsController from '@infrastructure/rest/RESTNewsController';
@@ -16,6 +16,7 @@ const container = createContainer({
 });
 
 container.register({
+  appRoot: asValue(__dirname + '/../'),
   loggerFactory: asClass(LoggerFactory, {
     injector: () => ({
       config: config.log,

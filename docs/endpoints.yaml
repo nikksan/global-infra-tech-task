@@ -1,0 +1,13 @@
+openapi: "3.0.1"
+servers:
+  - url: /
+info:
+  title: Global Infra tech task
+  version: "1.0.0"
+  description: |
+    Minimalistic service providing REST for news entity.
+paths:
+  /news:
+    $ref: "./paths/news/index.yaml"
+  /news/{id}:
+    $ref: "./paths/news/by-id.yaml"
