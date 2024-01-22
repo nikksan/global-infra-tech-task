@@ -1,9 +1,9 @@
-import { loadConfig } from "@config/index";
-import MongoNewsRepository from "@infrastructure/repository/mongo/MongoNewsRepository";
-import LoggerFactory from "@infrastructure/logger/LoggerFactory";
-import FindNewsByIdQuery from "@application/query/FindNewsByIdQuery";
+import { loadConfig } from '@config/index';
+import MongoNewsRepository from '@infrastructure/repository/mongo/MongoNewsRepository';
+import LoggerFactory from '@infrastructure/logger/LoggerFactory';
+import FindNewsByIdQuery from '@application/query/FindNewsByIdQuery';
 import { generateRandomId } from '@tests/util/funcs';
-import NewsFactory from "@tests/util/NewsFactory";
+import NewsFactory from '@tests/util/NewsFactory';
 
 describe('FindNewsByIdQuery', () => {
   const config = loadConfig();
@@ -31,11 +31,11 @@ describe('FindNewsByIdQuery', () => {
     const dto = await query.run(news.getId());
 
     expect(dto).toEqual({
-        id: news.getId(),
-        title: news.getTitle(),
-        shortDescription: news.getShortDescription(),
-        text: news.getText(),
-        date: news.getDate().toISOString(),
+      id: news.getId(),
+      title: news.getTitle(),
+      shortDescription: news.getShortDescription(),
+      text: news.getText(),
+      date: news.getDate().toISOString(),
     });
   });
 });

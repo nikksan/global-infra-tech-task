@@ -1,7 +1,7 @@
 import News, { ConstructorParams } from '@domain/model/News';
 
 export default class NewsFactory {
-  create(override: Partial<ConstructorParams> = {}) {
+  create(override: Partial<ConstructorParams> = {}): News {
     const defaults: ConstructorParams = {
       title: 'Lorem',
       shortDescription: 'lorem ipsum',

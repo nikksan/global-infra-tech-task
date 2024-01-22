@@ -1,12 +1,12 @@
-import { loadConfig } from "@config/index";
-import MongoNewsRepository from "@infrastructure/repository/mongo/MongoNewsRepository";
-import LoggerFactory from "@infrastructure/logger/LoggerFactory";
-import UpdateNewsCommand, { Input } from "@application/command/UpdateNewsCommand";
-import DomainValidationError from "@domain/errors/DomainValidationError";
-import News from "@domain/model/News";
+import { loadConfig } from '@config/index';
+import MongoNewsRepository from '@infrastructure/repository/mongo/MongoNewsRepository';
+import LoggerFactory from '@infrastructure/logger/LoggerFactory';
+import UpdateNewsCommand from '@application/command/UpdateNewsCommand';
+import DomainValidationError from '@domain/errors/DomainValidationError';
+import News from '@domain/model/News';
 import { catchError, generateRandomId } from '@tests/util/funcs';
-import EntityNotFoundError from "@application/errors/EntityNotFoundError";
-import NewsFactory from "@tests/util/NewsFactory";
+import EntityNotFoundError from '@application/errors/EntityNotFoundError';
+import NewsFactory from '@tests/util/NewsFactory';
 
 describe('UpdateNewsCommand', () => {
   const config = loadConfig();
@@ -16,7 +16,7 @@ describe('UpdateNewsCommand', () => {
   );
   const command = new UpdateNewsCommand(
     newsRepository,
-    new LoggerFactory(config.log)
+    new LoggerFactory(config.log),
   );
   const newsFactory = new NewsFactory();
 

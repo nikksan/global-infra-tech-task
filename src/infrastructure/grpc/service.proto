@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+service RequestTracker {
+  rpc TrackRequest(Request) returns (Empty) {}
+}
+
+enum HttpMethod {
+  GET = 0;
+  HEAD = 1;
+  POST = 2;
+  PUT = 3;
+  DELETE = 4;
+  OPTIONS = 5;
+  PATCH = 6;
+}
+
+message Request {
+  required string date = 1;
+  required string endpoint = 2;
+  required HttpMethod method = 3;
+  required string headers = 4;
+  optional string body = 5;
+  required string query = 6;
+  required int32 statusCode = 7;
+  required string response = 8;
+  required int32 processTime = 9;
+}
+
+message Empty {}

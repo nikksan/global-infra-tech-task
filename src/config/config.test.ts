@@ -11,8 +11,12 @@ const config: Config = {
     impl: parseEnum<LogImplementation>('LOG_IMPL', Object.values(LogImplementation), LogImplementation.Console),
     level: parseEnum<LogLevel>('LOG_LEVEL', Object.values(LogLevel), LogLevel.Debug),
   },
-  restServer: {
+  rest: {
     port: parseNumber('REST_SERVER_PORT', 3000),
+  },
+  grpc: {
+    port: parseNumber('GRPC_SERVER_PORT', 3001),
+    host: parseString('GRPC_SERVER_HOST', 'localhost'),
   },
   mongo: {
     user: parseString('MONGO_USER'),

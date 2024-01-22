@@ -37,39 +37,39 @@ export default class News {
     this.text = params.text;
   }
 
-  getId() {
+  getId(): string {
     return this.id;
   }
 
-  getDate() {
+  getDate(): Date {
     return this.date;
   }
 
-  getTitle() {
+  getTitle(): string {
     return this.title;
   }
 
-  getShortDescription() {
+  getShortDescription(): string {
     return this.shortDescription;
   }
 
-  getText() {
+  getText(): string {
     return this.text;
   }
 
-  changeTitle(newTitle: string) {
+  changeTitle(newTitle: string): void {
     this.validateTitle(newTitle);
 
     this.title = newTitle;
   }
 
-  changeShortDescription(newShortDescription: string) {
+  changeShortDescription(newShortDescription: string): void {
     this.validateShortDescription(newShortDescription);
 
     this.shortDescription = newShortDescription;
   }
 
-  changeText(newText: string) {
+  changeText(newText: string): void {
     this.validateText(newText);
 
     this.text = newText;

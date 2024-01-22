@@ -27,7 +27,7 @@ describe('MongoNewsRepository', () => {
 
   it('should update an entity', async () => {
     const news = newsFactory.create({
-        text: 'old text'
+      text: 'old text',
     });
 
     await newsRepository.save(news);

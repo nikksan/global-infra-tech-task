@@ -24,11 +24,11 @@ export default class MongoNewsRepository implements NewsRepository {
       .db(this.config.db)
       .collection(this.collectionName)
       .updateOne({
-        _id: new ObjectId(news.getId())
+        _id: new ObjectId(news.getId()),
       }, {
-        $set: this.mapEntityToDoc(news)
+        $set: this.mapEntityToDoc(news),
       }, {
-        upsert: true
+        upsert: true,
       });
   }
 
@@ -93,7 +93,7 @@ export default class MongoNewsRepository implements NewsRepository {
     return { total, items };
   }
 
-  async deleteAll() {
+  async deleteAll(): Promise<void> {
     const mongoClient = await this.getClient();
     await mongoClient
       .db(this.config.db)
@@ -110,6 +110,7 @@ export default class MongoNewsRepository implements NewsRepository {
       return this.mongoClient;
     }
 
+    // eslint-disable-next-line no-async-promise-executor
     this.mongoClientPromise = new Promise(async (resolve, reject) => {
       const url = `mongodb://${this.config.user}:${this.config.pass}@${this.config.host}:${this.config.port}/${this.config.db}`;
 

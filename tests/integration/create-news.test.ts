@@ -3,12 +3,16 @@ import container from '../../src/root';
 import ApiClient from './util/ApiClient';
 import NewsRepository from '@domain/repository/NewsRepository';
 import News from '@domain/model/News';
+import { start as startGrpcServer, stop as stopGrpcServer } from './util/grpc';
 
 describe('Create news', () => {
   const restServer = container.resolve<RESTServer>('restServer');
   const newsRepository = container.resolve<NewsRepository>('newsRepository');
   const apiClient = new ApiClient(restServer.startOnRandomPort());
   const endpoint = '/news';
+
+  beforeAll(() => startGrpcServer());
+  afterAll(() => stopGrpcServer());
 
   afterEach(() => newsRepository.deleteAll());
 

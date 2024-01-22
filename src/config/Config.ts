@@ -6,9 +6,13 @@ export interface Config {
     impl: LogImplementation;
     level: LogLevel;
   };
-  restServer: {
+  rest: {
     port: number;
   };
+  grpc: {
+    port: number,
+    host: string,
+  },
   mongo: {
     user: string,
     pass: string,

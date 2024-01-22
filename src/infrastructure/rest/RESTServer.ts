@@ -5,6 +5,7 @@ import bodyParser from 'koa-bodyparser';
 import RESTNewsController from './RESTNewsController';
 import LoggerFactory from '@infrastructure/logger/LoggerFactory';
 import { Logger } from '@infrastructure/logger/Logger';
+import RESTRequestTrackingController from './RESTRequestTrackingController';
 import { Server } from 'http';
 
 export default class RESTServer {
@@ -13,18 +14,14 @@ export default class RESTServer {
   private logger: Logger;
 
   constructor(
-    private config: Config['restServer'],
+    private config: Config['rest'],
     private restNewsController: RESTNewsController,
+    private restRequestTrackingController: RESTRequestTrackingController,
     loggerFactory: LoggerFactory,
   ) {
     this.logger = loggerFactory.create(this.constructor.name);
 
-    this.app.use(async (ctx, next) => {
-      const start = Date.now();
-      await next();
-      const ms = Date.now() - start;
-      console.log(`${ctx.method} ${ctx.url} - ${JSON.stringify(ctx.body)} ${ms} ms`);
-    });
+    this.app.use(this.restRequestTrackingController.trackRequest);
 
     this.router.post('/news', this.restNewsController.create);
     this.router.patch('/news/:id', this.restNewsController.update);
@@ -48,7 +45,7 @@ export default class RESTServer {
     });
   }
 
-  startOnRandomPort() {
+  startOnRandomPort(): Server {
     return this.app.listen();
   }
 }

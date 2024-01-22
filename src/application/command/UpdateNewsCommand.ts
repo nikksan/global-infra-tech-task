@@ -40,7 +40,7 @@ export default class UpdateNewsCommand {
 
     await this.newsRepository.save(news);
 
-    const updatedProps = Object.keys(input).filter(key => key !== 'id');
+    const updatedProps = Object.keys(input).filter((key) => key !== 'id');
     this.logger.info(`Updated ${updatedProps.join(', ')} of news #${news.getId()}`);
   }
 }

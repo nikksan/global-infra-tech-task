@@ -1,0 +1,22 @@
+version: "3.5"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    ports:
+      - ${REST_SERVER_PORT}:${REST_SERVER_PORT}
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+  mongo:
+    image: mongo:7.0.5
+    ports:
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_DB}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
+

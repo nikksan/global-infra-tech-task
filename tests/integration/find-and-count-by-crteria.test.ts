@@ -3,6 +3,7 @@ import container from '../../src/root';
 import ApiClient from './util/ApiClient';
 import NewsRepository from '@domain/repository/NewsRepository';
 import NewsFactory from '@tests/util/NewsFactory';
+import { start as startGrpcServer, stop as stopGrpcServer } from './util/grpc';
 
 describe('Find and count news by criteria', () => {
   const restServer = container.resolve<RESTServer>('restServer');
@@ -10,6 +11,9 @@ describe('Find and count news by criteria', () => {
   const newsRepository = container.resolve<NewsRepository>('newsRepository');
   const newsFactory = new NewsFactory();
   const endpoint = '/news';
+
+  beforeAll(() => startGrpcServer());
+  afterAll(() => stopGrpcServer());
 
   afterEach(() => newsRepository.deleteAll());
 
@@ -35,26 +39,26 @@ describe('Find and count news by criteria', () => {
     const response = await apiClient.get(endpoint, {
       page: 1,
       limit: 10,
-      'sort[]': sort
+      'sort[]': sort,
     });
 
     expect(response.statusCode).toEqual(400);
     expect(response.body.data).toBeNull();
     expect(response.body.error.code).toEqual(1000);
-    expect(response.body.error.meta[`sort[0]`]).toBeDefined();
+    expect(response.body.error.meta['sort[0]']).toBeDefined();
   });
 
   it.each(['title-asd', 'date=2010.01.01:2010.01.01'])('should respond with 400[1000] when filterConditions is invalid (%s)', async (filterConditions) => {
     const response = await apiClient.get(endpoint, {
       page: 1,
       limit: 10,
-      'filterConditions[]': filterConditions
+      'filterConditions[]': filterConditions,
     });
 
     expect(response.statusCode).toEqual(400);
     expect(response.body.data).toBeNull();
     expect(response.body.error.code).toEqual(1000);
-    expect(response.body.error.meta[`filterConditions[0]`]).toBeDefined();
+    expect(response.body.error.meta['filterConditions[0]']).toBeDefined();
   });
 
   it('should paginate items properly (page=1, limit=3, total=10)', async () => {
@@ -67,7 +71,7 @@ describe('Find and count news by criteria', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(10);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(1),
       padId(2),
       padId(3),
@@ -84,7 +88,7 @@ describe('Find and count news by criteria', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(10);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(6),
       padId(7),
       padId(8),
@@ -112,7 +116,7 @@ describe('Find and count news by criteria', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(3);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(1),
       padId(3),
       padId(2),
@@ -129,7 +133,7 @@ describe('Find and count news by criteria', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(3);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(2),
       padId(3),
       padId(1),
@@ -146,7 +150,7 @@ describe('Find and count news by criteria', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(3);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(1),
       padId(3),
       padId(2),
@@ -163,7 +167,7 @@ describe('Find and count news by criteria', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(3);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(2),
       padId(3),
       padId(1),
@@ -178,13 +182,13 @@ describe('Find and count news by criteria', () => {
     const response = await apiClient.get(endpoint, {
       page: 1,
       limit: 10,
-      'sort[]': ['date.desc', 'title.desc']
+      'sort[]': ['date.desc', 'title.desc'],
     });
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(3);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(2),
       padId(1),
       padId(3),
@@ -199,13 +203,13 @@ describe('Find and count news by criteria', () => {
     const response = await apiClient.get(endpoint, {
       page: 1,
       limit: 10,
-      'filterConditions[]': ['title=aa']
+      'filterConditions[]': ['title=aa'],
     });
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(1);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([padId(1)]);
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([padId(1)]);
   });
 
   it('should filter items properly (date)', async () => {
@@ -216,13 +220,13 @@ describe('Find and count news by criteria', () => {
     const response = await apiClient.get(endpoint, {
       page: 1,
       limit: 10,
-      'filterConditions[]': ['date=2020-03-03:2022-03-03']
+      'filterConditions[]': ['date=2020-03-03:2022-03-03'],
     });
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(2);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(1),
       padId(2),
     ]);
@@ -236,13 +240,13 @@ describe('Find and count news by criteria', () => {
     const response = await apiClient.get(endpoint, {
       page: 1,
       limit: 10,
-      'filterConditions[]': ['date=2020-03-03:2022-03-03', 'title=aa']
+      'filterConditions[]': ['date=2020-03-03:2022-03-03', 'title=aa'],
     });
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(1);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(2),
     ]);
   });
@@ -256,13 +260,13 @@ describe('Find and count news by criteria', () => {
       page: 1,
       limit: 10,
       'filterConditions[]': ['date=2020-03-03:2022-03-03', 'title=aa'],
-      filterRelation: 'and'
+      filterRelation: 'and',
     });
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(1);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(2),
     ]);
   });
@@ -276,13 +280,13 @@ describe('Find and count news by criteria', () => {
       page: 1,
       limit: 10,
       'filterConditions[]': ['date=2020-03-03:2021-03-03', 'title=cc'],
-      filterRelation: 'or'
+      filterRelation: 'or',
     });
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.total).toEqual(2);
-    expect(response.body.data.items.map((item: any) => item.id)).toEqual([
+    expect(response.body.data.items.map((item: { id: string }) => item.id)).toEqual([
       padId(1),
       padId(3),
     ]);

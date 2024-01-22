@@ -1,10 +1,10 @@
-import { loadConfig } from "@config/index";
-import MongoNewsRepository from "@infrastructure/repository/mongo/MongoNewsRepository";
-import LoggerFactory from "@infrastructure/logger/LoggerFactory";
-import DeleteNewsCommand from "@application/command/DeleteNewsCommand";
+import { loadConfig } from '@config/index';
+import MongoNewsRepository from '@infrastructure/repository/mongo/MongoNewsRepository';
+import LoggerFactory from '@infrastructure/logger/LoggerFactory';
+import DeleteNewsCommand from '@application/command/DeleteNewsCommand';
 import { catchError, generateRandomId } from '@tests/util/funcs';
-import EntityNotFoundError from "@application/errors/EntityNotFoundError";
-import NewsFactory from "@tests/util/NewsFactory";
+import EntityNotFoundError from '@application/errors/EntityNotFoundError';
+import NewsFactory from '@tests/util/NewsFactory';
 
 describe('DeleteNewsCommand', () => {
   const config = loadConfig();
@@ -14,7 +14,7 @@ describe('DeleteNewsCommand', () => {
   );
   const command = new DeleteNewsCommand(
     newsRepository,
-    new LoggerFactory(config.log)
+    new LoggerFactory(config.log),
   );
   const newsFactory = new NewsFactory();
 

@@ -1,22 +1,22 @@
-import { ParameterizedContext } from "koa";
-import RESTController from "./RESTController";
-import CreateNewsCommand from "@application/command/CreateNewsCommand";
-import UpdateNewsCommand from "@application/command/UpdateNewsCommand";
-import DeleteNewsCommand from "@application/command/DeleteNewsCommand";
-import FindNewsByIdQuery from "@application/query/FindNewsByIdQuery";
-import FindAndCountNewsByCriteriaQuery from "@application/query/FindAndCountNewsByCriteriaQuery";
-import { tags, assert } from "typia";
-import LoggerFactory from "@infrastructure/logger/LoggerFactory";
-import { RESTErrors } from "./RESTErrors";
-import { Criteria, FilterRelation, Sort } from "@domain/repository/NewsRepository";
+import { ParameterizedContext } from 'koa';
+import RESTController from './RESTController';
+import CreateNewsCommand from '@application/command/CreateNewsCommand';
+import UpdateNewsCommand from '@application/command/UpdateNewsCommand';
+import DeleteNewsCommand from '@application/command/DeleteNewsCommand';
+import FindNewsByIdQuery from '@application/query/FindNewsByIdQuery';
+import FindAndCountNewsByCriteriaQuery from '@application/query/FindAndCountNewsByCriteriaQuery';
+import { tags, assert } from 'typia';
+import LoggerFactory from '@infrastructure/logger/LoggerFactory';
+import { RESTErrors } from './RESTErrors';
+import { Criteria, FilterRelation, Sort } from '@domain/repository/NewsRepository';
 
 type IdPattern = string & tags.Pattern<'^[0-9a-fA-F]{24}$'>;
 type PagePattern = number & tags.Minimum<1>;
 type LimitPattern = number & tags.Minimum<1> & tags.Maximum<1000>;
-type SortPattern = string & tags.Pattern<"(date|title)\\.(asc|desc)">;
+type SortPattern = string & tags.Pattern<'(date|title)\\.(asc|desc)'>;
 type FilterConditionPattern = string & (
-  tags.Pattern<"title=[A-Za-z0-9]"> |
-  tags.Pattern<"date=\\d{4}-([0]\\d|1[0-2])-([0-2]\\d|3[01]):\\d{4}-([0]\\d|1[0-2])-([0-2]\\d|3[01])">
+  tags.Pattern<'title=[A-Za-z0-9]'> |
+  tags.Pattern<'date=\\d{4}-([0]\\d|1[0-2])-([0-2]\\d|3[01]):\\d{4}-([0]\\d|1[0-2])-([0-2]\\d|3[01])'>
 );
 type FilterRelationPattern = string & tags.Pattern<'(and|or)'>;
 
@@ -32,7 +32,7 @@ export default class RESTNewsController extends RESTController {
     super(loggerFactory);
   }
 
-  create = async (ctx: ParameterizedContext) => {
+  create = async (ctx: ParameterizedContext): Promise<void> => {
     try {
       type ExpectedInput = {
         title: string
@@ -47,9 +47,9 @@ export default class RESTNewsController extends RESTController {
     } catch (err) {
       this.handleError(ctx, err as Error);
     }
-  }
+  };
 
-  update = async (ctx: ParameterizedContext) => {
+  update = async (ctx: ParameterizedContext): Promise<void> => {
     try {
       type ExpectedInput = {
         id: IdPattern
@@ -69,9 +69,9 @@ export default class RESTNewsController extends RESTController {
     } catch (err) {
       this.handleError(ctx, err as Error);
     }
-  }
+  };
 
-  delete = async (ctx: ParameterizedContext) => {
+  delete = async (ctx: ParameterizedContext): Promise<void> => {
     try {
       const validatedInput = assert<IdPattern>(ctx.params.id);
 
@@ -81,9 +81,9 @@ export default class RESTNewsController extends RESTController {
     } catch (err) {
       this.handleError(ctx, err as Error);
     }
-  }
+  };
 
-  findOne = async (ctx: ParameterizedContext) => {
+  findOne = async (ctx: ParameterizedContext): Promise<void> => {
     try {
       const validatedInput = assert<IdPattern>(ctx.params.id);
       const result = await this.findNewsByIdQuery.run(validatedInput);
@@ -95,9 +95,9 @@ export default class RESTNewsController extends RESTController {
     } catch (err) {
       this.handleError(ctx, err as Error);
     }
-  }
+  };
 
-  findMany = async (ctx: ParameterizedContext) => {
+  findMany = async (ctx: ParameterizedContext): Promise<void> => {
     try {
       const validatedInput = this.prepareFindAndCountInput(ctx);
       const result = await this.findAndCountNewsByCriteriaQuery.run(validatedInput);
@@ -105,7 +105,7 @@ export default class RESTNewsController extends RESTController {
     } catch (err) {
       this.handleError(ctx, err as Error);
     }
-  }
+  };
 
   private prepareFindAndCountInput(ctx: ParameterizedContext): Criteria {
     type ExpectedInput = {
@@ -131,7 +131,7 @@ export default class RESTNewsController extends RESTController {
       limit: validatedInput.limit,
       filter: {
         relation: (validatedInput.filterRelation as FilterRelation) ?? FilterRelation.And,
-        conditions: validatedInput.filterConditions?.map(condition => {
+        conditions: validatedInput.filterConditions?.map((condition) => {
           const [column, value] = condition.split('=');
           if (column === 'title') {
             return { column, value };
@@ -143,14 +143,14 @@ export default class RESTNewsController extends RESTController {
 
           return {
             column: 'date',
-            value: [startDate, endDate]
-          }
+            value: [startDate, endDate],
+          };
         }) || [],
       },
-      sort: validatedInput.sort?.map(sort => {
+      sort: validatedInput.sort?.map((sort) => {
         const [column, order] = sort.split('.');
         return { column, order } as Sort;
-      }) || []
+      }) || [],
     };
   }
 
